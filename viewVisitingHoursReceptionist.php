@@ -1,0 +1,61 @@
+<?php
+include("adheader.php");
+include("dbconnection.php");
+if(isset($_GET[delid]))
+{
+	$sql ="DELETE FROM doctor_timings WHERE doctor_timings_id='$_GET[delid]'";
+	$qsql=mysqli_query($con,$sql);
+	if(mysqli_affected_rows($con) == 1)
+	{
+		echo "<script>alert('doctortimings record deleted successfully..');</script>";
+	}
+}
+?>
+<div class="container-fluid">
+  <div class="block-header">
+    <h2 class="text-center">View Doctor Timings</h2>
+
+  </div>
+
+<div class="card">
+
+  <section class="container">
+    <table class="table table-bordered table-striped table-hover js-exportable dataTable" >
+      <thead>
+        <tr>
+          <td>Doctor</td>
+          <td>Timings available</td>
+          <td>Status</td>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <?php
+		$sql ="SELECT * FROM doctor_timings ";
+		$qsql = mysqli_query($con,$sql);
+		while($rs = mysqli_fetch_array($qsql))
+		{
+			$sqldoctor = "SELECT * FROM doctor ";
+			$qsqldoctor = mysqli_query($con,$sqldoctor);
+			$rsdoctor = mysqli_fetch_array($qsqldoctor);
+			
+			$sqldoct = "SELECT * FROM doctor_timings ";
+			$qsqldoct = mysqli_query($con,$sqldoct);
+			$rsdoct = mysqli_fetch_array($qsqldoct);
+			
+        echo "<tr>
+          <td>&nbsp;$rsdoctor[doctorname]</td>
+          <td>&nbsp;$rsdoct[start_time] - $rsdoct[end_time]</td>
+          <td>&nbsp;$rs[status]</td>
+        </tr>";
+		}
+		?>
+        
+      </tbody>
+    </table>
+</section>
+</div>
+</div>
+<?php
+include("adformfooter.php");
+?>
